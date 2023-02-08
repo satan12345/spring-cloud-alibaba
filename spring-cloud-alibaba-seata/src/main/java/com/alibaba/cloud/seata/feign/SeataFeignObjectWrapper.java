@@ -40,7 +40,9 @@ public class SeataFeignObjectWrapper {
 	Object wrap(Object bean) {
 		if (bean instanceof Client && !(bean instanceof SeataFeignClient)) {
 			if (bean instanceof LoadBalancerFeignClient) {
+				//如果bean是 LoadBalancerFeignClient实例 强制类型转换
 				LoadBalancerFeignClient client = ((LoadBalancerFeignClient) bean);
+				//替换spring中原来的实例
 				return new SeataLoadBalancerFeignClient(client.getDelegate(), factory(),
 						clientFactory(), this.beanFactory);
 			}

@@ -70,16 +70,26 @@ public class SentinelAutoConfiguration {
 
 	@Autowired
 	private SentinelProperties properties;
-
+	/**
+	 * URL整合  xxx/1   xxx/2  xxx/3 统一整理成 xxxx/{xxxx}的样子
+	 */
 	@Autowired(required = false)
 	private UrlCleaner urlCleaner;
-
+	/**
+	 * 统一异常处理
+	 */
 	@Autowired(required = false)
 	private UrlBlockHandler urlBlockHandler;
-
+	/**
+	 * 请求来源的解析器
+	 */
 	@Autowired(required = false)
 	private RequestOriginParser requestOriginParser;
 
+	/**
+	 * 在bean构造函数调用之后
+	 * 初始化之前 调用
+	 */
 	@PostConstruct
 	private void init() {
 		if (StringUtils.isEmpty(System.getProperty(LogBase.LOG_DIR))
@@ -159,6 +169,11 @@ public class SentinelAutoConfiguration {
 
 	}
 
+	/**
+	 * 创建切面bean
+	 *  AOP 环绕通知 切 SentinelResource 这个注解
+	 * @return
+	 */
 	@Bean
 	@ConditionalOnMissingBean
 	public SentinelResourceAspect sentinelResourceAspect() {

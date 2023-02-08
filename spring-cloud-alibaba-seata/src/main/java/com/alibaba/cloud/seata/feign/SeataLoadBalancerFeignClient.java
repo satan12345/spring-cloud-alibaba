@@ -50,8 +50,16 @@ public class SeataLoadBalancerFeignClient extends LoadBalancerFeignClient {
 		this.beanFactory = beanFactory;
 	}
 
+	/**
+	 * 执行请求时调用的方法
+	 * @param request
+	 * @param options
+	 * @return
+	 * @throws IOException
+	 */
 	@Override
 	public Response execute(Request request, Request.Options options) throws IOException {
+		//修改request
 		Request modifiedRequest = getModifyRequest(request);
 		return super.execute(modifiedRequest, options);
 	}
@@ -60,17 +68,23 @@ public class SeataLoadBalancerFeignClient extends LoadBalancerFeignClient {
 		return (Client) new SeataFeignObjectWrapper(beanFactory).wrap(delegate);
 	}
 
+	/**
+	 * 获取修改后的request
+	 * @param request
+	 * @return
+	 */
 	private Request getModifyRequest(Request request) {
-
+		//获取xid
 		String xid = RootContext.getXID();
 
 		if (StringUtils.isEmpty(xid)) {
 			return request;
 		}
-
+		//创建新的请求头
 		Map<String, Collection<String>> headers = new HashMap<>(MAP_SIZE);
+		//将原有的请求头数据放入
 		headers.putAll(request.headers());
-
+		//添加xid 的请求头
 		List<String> seataXid = new ArrayList<>();
 		seataXid.add(xid);
 		headers.put(RootContext.KEY_XID, seataXid);

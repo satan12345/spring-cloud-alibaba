@@ -64,6 +64,21 @@ public class SeataFeignClientAutoConfiguration {
 	@Configuration
 	protected static class FeignBeanPostProcessorConfiguration {
 
+		/**
+		 * 创建seatFeign的包装类
+		 * 用于注入下面的 SeataBeanPostProcessor
+		 * @param beanFactory
+		 * @return
+		 */
+		@Bean
+		SeataFeignObjectWrapper seataFeignObjectWrapper(BeanFactory beanFactory) {
+			return new SeataFeignObjectWrapper(beanFactory);
+		}
+		/**
+		 * 创建一个beanPostProcessor
+		 * @param seataFeignObjectWrapper
+		 * @return
+		 */
 		@Bean
 		SeataBeanPostProcessor seataBeanPostProcessor(
 				SeataFeignObjectWrapper seataFeignObjectWrapper) {
@@ -76,10 +91,7 @@ public class SeataFeignClientAutoConfiguration {
 			return new SeataContextBeanPostProcessor(beanFactory);
 		}
 
-		@Bean
-		SeataFeignObjectWrapper seataFeignObjectWrapper(BeanFactory beanFactory) {
-			return new SeataFeignObjectWrapper(beanFactory);
-		}
+
 	}
 
 }

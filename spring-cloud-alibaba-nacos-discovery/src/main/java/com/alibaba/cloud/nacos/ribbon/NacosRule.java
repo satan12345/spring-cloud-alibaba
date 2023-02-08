@@ -50,6 +50,7 @@ public class NacosRule extends AbstractLoadBalancerRule {
 	@Override
 	public Server choose(Object key) {
 		try {
+			//获取集群名称
 			String clusterName = this.nacosDiscoveryProperties.getClusterName();
 			DynamicServerListLoadBalancer loadBalancer = (DynamicServerListLoadBalancer) getLoadBalancer();
 			String name = loadBalancer.getName();

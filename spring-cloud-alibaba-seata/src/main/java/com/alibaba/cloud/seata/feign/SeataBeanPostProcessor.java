@@ -30,6 +30,13 @@ final class SeataBeanPostProcessor implements BeanPostProcessor {
 		this.seataFeignObjectWrapper = seataFeignObjectWrapper;
 	}
 
+	/**
+	 * bean初始化之前调用
+	 * @param bean
+	 * @param beanName
+	 * @return
+	 * @throws BeansException
+	 */
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName)
 			throws BeansException {
