@@ -49,6 +49,10 @@ public class SentinelWebAutoConfiguration {
 	@Autowired
 	private SentinelProperties properties;
 
+	/**
+	 * 创建filter 拦截所有请求
+	 * @return
+	 */
 	@Bean
 	@ConditionalOnProperty(name = "spring.cloud.sentinel.filter.enabled", matchIfMissing = true)
 	public FilterRegistrationBean sentinelFilter() {
@@ -63,12 +67,15 @@ public class SentinelWebAutoConfiguration {
 			filterConfig.setUrlPatterns(defaultPatterns);
 		}
 
-		registration.addUrlPatterns(filterConfig.getUrlPatterns().toArray(new String[0]));
+
 		Filter filter = new CommonFilter();
 		registration.setFilter(filter);
 		registration.setOrder(filterConfig.getOrder());
+		//位Filter的初始参数
 		registration.addInitParameter("HTTP_METHOD_SPECIFY",
 				String.valueOf(properties.getHttpMethodSpecify()));
+		//设置filter的匹配会在 默认/*
+		registration.addUrlPatterns(filterConfig.getUrlPatterns().toArray(new String[0]));
 		log.info("[Sentinel Starter] register Sentinel with urlPatterns: {}.",
 				filterConfig.getUrlPatterns());
 		return registration;
